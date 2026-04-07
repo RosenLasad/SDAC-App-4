@@ -463,6 +463,7 @@
           <article class="subCard subCard--free">
             <div class="subCard__badge">Accedi</div>
             <h4>Hai già un account?</h4>
+            <p class="muted">Accedi per ritrovare il tuo profilo e il piano attivo.</p>
             <form id="settingsLoginForm" class="subForm subForm--compact" novalidate>
               <label class="subField">
                 <span>Email</span>
@@ -481,6 +482,7 @@
           <article class="subCard subCard--premium">
             <div class="subCard__badge">Registrazione</div>
             <h4>Crea il tuo account</h4>
+            <p class="muted">Registrati per salvare il profilo e gestire l'abbonamento.</p>
             <form id="settingsRegisterForm" class="subForm subForm--compact" novalidate>
               <label class="subField">
                 <span>Nome e cognome</span>
@@ -514,8 +516,8 @@
       <section class="subSignupCard">
         <div class="subSignupCard__head">
           <div>
-            <h4>Account collegato</h4>
-            <p class="muted">Sei autenticato con il tuo account Supabase. L'app può leggere il tuo piano reale e collegarti al checkout Stripe.</p>
+            <h4>Profilo collegato</h4>
+            <p class="muted">Da qui puoi vedere il tuo profilo, aggiornare i dati e gestire il tuo piano.</p>
           </div>
           <div class="subStatusBadge">${getPlanLabel(effectiveState.plan)}</div>
         </div>
@@ -546,6 +548,7 @@
         </div>
 
         <div class="subNoteList">
+          <p>Puoi gestire il tuo piano in qualsiasi momento.</p>
           <p><strong>Nota:</strong> se nelle impostazioni di Supabase è attiva la conferma email, un nuovo utente potrebbe dover confermare l'indirizzo prima di usare il checkout.</p>
         </div>
       </section>
@@ -554,17 +557,22 @@
 
   function buildUserHtml() {
     const state = getEffectiveMembershipState();
+    const loggedIn = isAuthenticated();
+    const heroTitle = loggedIn ? "Profilo e piano" : "Accesso e piano";
+    const heroText = loggedIn
+      ? "Da qui puoi vedere il tuo profilo, aggiornare i dati e gestire il tuo piano."
+      : "Accedi o registrati per salvare il tuo profilo e gestire l'abbonamento.";
+    const areaText = loggedIn
+      ? "Gestisci il tuo account, il profilo e il piano attivo."
+      : "Accedi o registrati per iniziare a usare il tuo profilo SDAC App.";
 
     return `
       <div class="subscribeFlow">
         <section class="subHero">
           <div>
             <div class="subHero__eyebrow">Utente SDAC App</div>
-            <h3>Profilo, piano e installazione</h3>
-            <p>
-              Qui trovi i dati del tuo account, lo stato del piano, le indicazioni per l'installazione dell'app
-              e l'accesso rapido alla gestione dell'abbonamento.
-            </p>
+            <h3>${heroTitle}</h3>
+            <p>${heroText}</p>
           </div>
         </section>
 
@@ -579,23 +587,13 @@
             </ul>
           </article>
 
-          <article class="subCard subCard--lessons">
-            <div class="subCard__badge">Installazione</div>
-            <h4>SDAC App</h4>
-            <ul class="subList">
-              <li>Installazione PWA supportata su browser compatibili</li>
-              <li>Versione attuale pronta per login reale + checkout Stripe</li>
-              <li>Pagamento reale pensato per Netlify Functions</li>
-            </ul>
-          </article>
-
           <article class="subCard subCard--premium">
             <div class="subCard__badge">Abbonamento</div>
-            <h4>Utenti finali</h4>
+            <h4>Gestione piano</h4>
             <ul class="subList">
               <li>Versione Free con limiti attivi</li>
               <li>Versione Premium con strumenti completi</li>
-              <li>Checkout Stripe collegabile al tuo database utenti</li>
+              <li>Puoi gestire il tuo piano in qualsiasi momento.</li>
             </ul>
           </article>
         </section>
@@ -604,7 +602,7 @@
           <div class="subSignupCard__head">
             <div>
               <h4>Area utente</h4>
-              <p class="muted">Accedi, registrati o controlla il tuo profilo reale. Questo pannello usa Supabase Auth quando configurato.</p>
+              <p class="muted">${areaText}</p>
             </div>
           </div>
           ${buildAuthSummaryHtml()}
@@ -620,16 +618,26 @@
         <section class="subHero">
           <div>
             <div class="subHero__eyebrow">Impostazioni SDAC App</div>
-            <h3>Area in aggiornamento</h3>
+            <h3>Preferenze e informazioni</h3>
             <p>
-              Il contenuto principale relativo a profilo, piano e accesso è stato spostato nel nuovo pannello
-              <strong>Utente</strong>, apribile dal nome utente in alto.
+              Qui puoi raccogliere testi descrittivi, preferenze dell'app e strumenti utili.
+              Il contenuto relativo a profilo, accesso e abbonamento resta nel pannello <strong>Utente</strong>.
             </p>
           </div>
         </section>
 
         <section class="subPlansGrid subPlansGrid--settings">
           <article class="subCard subCard--lessons">
+            <div class="subCard__badge">Installazione</div>
+            <h4>SDAC App</h4>
+            <ul class="subList">
+              <li>Installazione PWA supportata su browser compatibili</li>
+              <li>Puoi aggiungere l'app alla schermata Home del dispositivo</li>
+              <li>Questa sezione può ospitare guida, preferenze e strumenti futuri</li>
+            </ul>
+          </article>
+
+          <article class="subCard subCard--free">
             <div class="subCard__badge">Impostazioni</div>
             <h4>Spazio pronto per le prossime rifiniture</h4>
             <ul class="subList">
@@ -1046,7 +1054,7 @@
 
             <div class="subActions">
               <button class="chip chip--primary" type="submit" id="subSubscribeButton">${premiumUser ? "Aggiorna con Stripe" : "Abbonati con Stripe"}</button>
-              <button class="chip chip--button" type="button" id="subSaveDraft">Salva dati</button>
+              <button class="chip chip--button" type="button" id="subSaveDraft">Salva profilo</button>
             </div>
 
             <div class="subNoteList">
@@ -1303,7 +1311,7 @@
     if (saveDraftButton && form) {
       saveDraftButton.addEventListener("click", () => {
         const data = saveSubscribeDraft(form);
-        setSubscribeMessage(`Dati salvati in locale per ${escapeHtml(data.email || data.username || "il tuo account")}.`, "success");
+        setSubscribeMessage(`Profilo salvato in locale per ${escapeHtml(data.email || data.username || "il tuo account")}.`, "success");
       });
     }
 
