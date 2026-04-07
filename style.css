@@ -47,7 +47,7 @@ html,body{
 
 .topbar__left, .topbar__right{ display:flex; gap:10px; align-items:center; }
 .topbar__center{ display:flex; align-items:center; justify-content:center; gap:10px; min-width: 200px; }
-.brand{ height: 28px; width:auto; display:block; }
+.brand{ height: 44px; width:auto; display:block; }
 .brandFallback{ font-weight:800; letter-spacing:.4px; }
 
 .layout{
